@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Daily News</string>
+    <string name="error_message">Something went wrong. Please try again when network is available</string>
+    <string name="menu_item_recent">Recent</string>
+    <string name="menu_item_popular">Popular</string>
+    <string name="banner_image">banner image</string>
+    <string name="loading_image">loading image</string>
+    <string name="dismiss">Dismiss</string>
+</resources>

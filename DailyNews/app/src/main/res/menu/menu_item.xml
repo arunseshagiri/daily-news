@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.arunkumar.dailynews.MainActivity">
+
+    <item android:id="@+id/recent"
+          android:title="@string/menu_item_recent"/>
+    <item android:id="@+id/popular"
+          android:title="@string/menu_item_popular"/>
+</menu>
