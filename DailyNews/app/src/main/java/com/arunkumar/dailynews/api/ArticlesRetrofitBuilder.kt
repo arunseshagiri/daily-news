@@ -10,30 +10,32 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class ArticlesRetrofitBuilder {
-    private val baseUrl: String =
-        "https://raw.githubusercontent.com/arunseshagiri/caro-news/master/"
+    private val baseUrl: String = "https://newsapi.org/v2/"
 
     private fun gson(): Gson = GsonBuilder().setPrettyPrinting().create()
 
     private fun okHttpClient(): OkHttpClient = OkHttpClient()
-        .newBuilder()
-        .addInterceptor(buildLogger())
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .retryOnConnectionFailure(false)
-        .build()
+            .newBuilder()
+            .addInterceptor(buildLogger())
+            .addNetworkInterceptor {
+                val requestBuilder = it.request().newBuilder()
+                requestBuilder.addHeader("Authorization", "ca03e0d6656148cbaf18a2ce6cee8d6e")
+                it.proceed(requestBuilder.build())
+            }
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(false)
+            .build()
 
     private fun getClient(): Retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create(gson()))
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .baseUrl(baseUrl)
-        .client(okHttpClient())
-        .build()
+            .addConverterFactory(GsonConverterFactory.create(gson()))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .baseUrl(baseUrl)
+            .client(okHttpClient())
+            .build()
 
 
-    private fun buildLogger(): HttpLoggingInterceptor =
-        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+    private fun buildLogger(): HttpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
-    fun getApi(): ArticlesApi = getClient().create(
-        ArticlesApi::class.java)
+    fun getApi(): ArticlesApi = getClient().create(ArticlesApi::class.java)
 }

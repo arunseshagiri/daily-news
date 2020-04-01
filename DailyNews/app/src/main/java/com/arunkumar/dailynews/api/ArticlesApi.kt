@@ -1,11 +1,11 @@
 package com.arunkumar.dailynews.api
 
-import com.arunkumar.dailynews.model.Articles
 import com.arunkumar.dailynews.model.OuterArticle
 import io.reactivex.Single
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface ArticlesApi {
-    @GET("news_1.json")
-    fun articles(): Single<OuterArticle>
+    @GET("top-headlines?country=in&pageSize=100&q=corona")
+    fun articles(@Query("page") page: Int, @Query("country") country: String): Single<OuterArticle>
 }

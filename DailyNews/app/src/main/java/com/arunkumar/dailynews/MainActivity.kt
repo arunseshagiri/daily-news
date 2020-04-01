@@ -23,10 +23,13 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var articlesApiService: ArticlesApiService
+
     @Inject
     lateinit var viewModel: ArticleViewModel
+
     @Inject
     lateinit var disposables: CompositeDisposable
+
     @Inject
     lateinit var articleAdapter: ArticleAdapter
 
