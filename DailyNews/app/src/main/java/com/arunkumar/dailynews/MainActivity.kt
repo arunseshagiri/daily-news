@@ -1,5 +1,6 @@
 package com.arunkumar.dailynews
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arunkumar.dailynews.api.ArticlesApiService
 import com.arunkumar.dailynews.model.Articles
+import com.arunkumar.dailynews.utils.ARTICLE_URL
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -53,6 +55,18 @@ class MainActivity : AppCompatActivity() {
             !(savedInstanceState?.containsKey("article_list") ?: false) -> viewModel.onCreate()
             else -> hideProgressUI()
         }
+        articleAdapter
+            .launchWebView()
+            .subscribe(
+                {
+                    val intent = Intent(this, ArticleWebViewActivity::class.java)
+                    intent.putExtra(ARTICLE_URL, it)
+                    startActivity(intent)
+                },
+                {
+                    it.printStackTrace()
+                }
+            )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -80,8 +94,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.recent -> viewModel.sortBasedOnRecentArticle(articleAdapter.articleList())
-            R.id.popular -> viewModel.sortBasedOnPopularArticle(articleAdapter.articleList())
+            R.id.settings -> {
+                //TODO: Open settings preference
+            }
         }
         return super.onOptionsItemSelected(item)
     }
