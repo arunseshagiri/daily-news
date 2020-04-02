@@ -14,4 +14,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_progress"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:contentDescription="@string/loading_image"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/webview"
+        app:layout_constraintStart_toStartOf="@+id/webview"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_loading" />
 </androidx.constraintlayout.widget.ConstraintLayout>

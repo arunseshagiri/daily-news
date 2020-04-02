@@ -5,15 +5,13 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationSet
-import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arunkumar.dailynews.api.ArticlesApiService
 import com.arunkumar.dailynews.model.Articles
 import com.arunkumar.dailynews.utils.ARTICLE_URL
+import com.arunkumar.dailynews.utils.hideProgressUI
+import com.arunkumar.dailynews.utils.showProgressUI
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -53,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
         when {
             !(savedInstanceState?.containsKey("article_list") ?: false) -> viewModel.onCreate()
-            else -> hideProgressUI()
+            else -> hideProgressUI(iv_progress)
         }
         articleAdapter
             .launchWebView()
@@ -148,7 +146,7 @@ class MainActivity : AppCompatActivity() {
             .showProgress()
             .subscribe(
                 {
-                    showProgressUI()
+                    showProgressUI(iv_progress)
                 },
                 {
                     showErrorUI()
@@ -160,7 +158,7 @@ class MainActivity : AppCompatActivity() {
             .hideProgress()
             .subscribe(
                 {
-                    hideProgressUI()
+                    hideProgressUI(iv_progress)
                 },
                 {
                     showErrorUI()
@@ -179,30 +177,8 @@ class MainActivity : AppCompatActivity() {
                 }
             )
 
-    private fun showProgressUI() {
-        val animationSet = AnimationSet(false)
-        val animRotate: Animation = AnimationUtils.loadAnimation(this,
-            R.anim.rotate
-        )
-        val animSlideIn: Animation = AnimationUtils.loadAnimation(this,
-            R.anim.abc_slide_in_bottom
-        )
-        animationSet.addAnimation(animRotate)
-        animationSet.addAnimation(animSlideIn)
-        iv_progress.startAnimation(animationSet)
-        iv_progress.visibility = View.VISIBLE
-    }
-
-    private fun hideProgressUI() {
-        val animSlideOut: Animation = AnimationUtils.loadAnimation(this,
-            R.anim.abc_slide_out_bottom
-        )
-        iv_progress.startAnimation(animSlideOut)
-        iv_progress.visibility = View.GONE
-    }
-
     private fun showErrorUI() {
-        hideProgressUI()
+        hideProgressUI(iv_progress)
         val errorMsg = Snackbar.make(
             main_layout,
             getString(R.string.error_message),

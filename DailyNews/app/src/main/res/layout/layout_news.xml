@@ -66,12 +66,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
+                android:focusable="true"
                 android:fontFamily="@font/roboto"
                 android:letterSpacing="0.06"
                 android:lineSpacingExtra="9.33sp"
-                android:textColor="#8F939C"
+                android:textColor="@color/text_click_ripple_effect"
                 android:textSize="12sp" />
 
             <TextView

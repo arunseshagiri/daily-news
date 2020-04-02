@@ -1,9 +1,13 @@
 package com.arunkumar.dailynews
 
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.arunkumar.dailynews.utils.ARTICLE_URL
+import com.arunkumar.dailynews.utils.hideProgressUI
+import com.arunkumar.dailynews.utils.showProgressUI
 import kotlinx.android.synthetic.main.activity_article_web_view.*
 
 class ArticleWebViewActivity : AppCompatActivity() {
@@ -15,7 +19,15 @@ class ArticleWebViewActivity : AppCompatActivity() {
         val bundle = intent.extras
         val webSettings = webview.settings
         webSettings.javaScriptEnabled = true
-        webview.webViewClient = WebViewClient()
+        webview.webViewClient = object : WebViewClient() {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                showProgressUI(iv_progress)
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                hideProgressUI(iv_progress)
+            }
+        }
         webview.loadUrl(bundle?.getString(ARTICLE_URL))
     }
 }
