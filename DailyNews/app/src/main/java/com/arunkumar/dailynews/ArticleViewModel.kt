@@ -17,8 +17,12 @@ class ArticleViewModel(private val articlesApiService: ArticlesApiService) {
     private var articleListSortedForPopular: PublishSubject<List<Articles>> =
         PublishSubject.create()
 
-    fun onCreate() {
-        fetchArticles()
+    fun onCreate(country: String) {
+        fetchArticles(country)
+    }
+
+    fun onStart(country: String) {
+        fetchArticles(country)
     }
 
     fun updateArticleList(): PublishSubject<List<Articles>> = updateArticleList
@@ -33,8 +37,8 @@ class ArticleViewModel(private val articlesApiService: ArticlesApiService) {
 
     fun articleListSortedForPopular(): PublishSubject<List<Articles>> = articleListSortedForPopular
 
-    private fun fetchArticles() = articlesApiService
-        .articles()
+    private fun fetchArticles(country: String) = articlesApiService
+        .articles(country)
         .toObservable()
         .observeOn(mainThread())
         .doOnError { hideProgress().onNext(Unit) }

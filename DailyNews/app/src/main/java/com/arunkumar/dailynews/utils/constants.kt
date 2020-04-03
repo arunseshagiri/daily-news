@@ -9,6 +9,7 @@ import android.widget.ImageView
 import com.arunkumar.dailynews.R
 
 const val ARTICLE_URL = "article_url"
+const val PREFERENCE_COUNTRY = "country"
 
 fun Context.showProgressUI(imageView: ImageView) {
     val animationSet = AnimationSet(false)

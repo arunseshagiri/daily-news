@@ -71,6 +71,8 @@ android {
 
         //Pretty time
         implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+
+        implementation 'androidx.preference:preference:1.1.0'
     }
 }
 

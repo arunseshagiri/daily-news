@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <DropDownPreference
+        app:defaultValue="in"
+        app:entries="@array/country_entries"
+        app:entryValues="@array/country_values"
+        app:key="country"
+        app:summary="%s"
+        app:icon="@drawable/ic_chose_country"
+        app:title="Choose Country" />
+
+</PreferenceScreen>

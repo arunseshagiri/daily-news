@@ -6,10 +6,12 @@ import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arunkumar.dailynews.api.ArticlesApiService
 import com.arunkumar.dailynews.model.Articles
 import com.arunkumar.dailynews.utils.ARTICLE_URL
+import com.arunkumar.dailynews.utils.PREFERENCE_COUNTRY
 import com.arunkumar.dailynews.utils.hideProgressUI
 import com.arunkumar.dailynews.utils.showProgressUI
 import com.google.android.material.snackbar.Snackbar
@@ -50,7 +52,10 @@ class MainActivity : AppCompatActivity() {
         disposables.add(listenForPopularArticleList())
 
         when {
-            !(savedInstanceState?.containsKey("article_list") ?: false) -> viewModel.onCreate()
+            !(savedInstanceState?.containsKey("article_list") ?: false) -> viewModel.onCreate(
+                PreferenceManager.getDefaultSharedPreferences(this)
+                    .getString(PREFERENCE_COUNTRY, "") ?: "in"
+            )
             else -> hideProgressUI(iv_progress)
         }
         articleAdapter
@@ -93,7 +98,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.settings -> {
-                //TODO: Open settings preference
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
         }
         return super.onOptionsItemSelected(item)
