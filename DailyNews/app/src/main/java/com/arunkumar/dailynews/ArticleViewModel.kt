@@ -9,6 +9,7 @@ import io.reactivex.subjects.PublishSubject
 
 class ArticleViewModel(private val articlesApiService: ArticlesApiService) {
     private var updateArticleList: PublishSubject<List<Articles>> = PublishSubject.create()
+    private var noNewsAvailable: PublishSubject<Unit> = PublishSubject.create()
     private var showProgress: PublishSubject<Unit> = PublishSubject.create()
     private var hideProgress: PublishSubject<Unit> = PublishSubject.create()
     private var showError: PublishSubject<String> = PublishSubject.create()
@@ -33,6 +34,8 @@ class ArticleViewModel(private val articlesApiService: ArticlesApiService) {
 
     fun articleListSortedForPopular(): PublishSubject<List<Articles>> = articleListSortedForPopular
 
+    fun noNewsAvailable(): PublishSubject<Unit> = noNewsAvailable
+
     private fun fetchArticles(country: String?) = articlesApiService
         .articles(country)
         .toObservable()
@@ -42,6 +45,9 @@ class ArticleViewModel(private val articlesApiService: ArticlesApiService) {
         .doOnSubscribe { showProgress().onNext(Unit) }
         .subscribe(
             {
+                if(it.articles.isEmpty()) {
+                    noNewsAvailable().onNext(Unit)
+                }
                 updateArticleList().onNext(it.articles)
             },
             {

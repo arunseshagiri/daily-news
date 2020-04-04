@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="country_entries">
+        <item>World</item>
         <item>India</item>
         <item>USA</item>
         <item>United Arab Emirates</item>
     </string-array>
 
     <string-array name="country_values">
+        <item></item>
         <item>in</item>
         <item>us</item>
         <item>ae</item>

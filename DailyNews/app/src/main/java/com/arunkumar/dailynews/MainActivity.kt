@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         disposables.add(listenToShowProgress())
         disposables.add(listenToHideProgress())
         disposables.add(listenToShowError())
+        disposables.add(listenToNoNewsAvailable())
 
         articleAdapter
             .launchWebView()
@@ -60,6 +63,14 @@ class MainActivity : AppCompatActivity() {
                 }
             )
     }
+
+    private fun listenToNoNewsAvailable(): Disposable =
+        viewModel
+            .noNewsAvailable()
+            .subscribe {
+                Toast.makeText(this, "No news available for this country", LENGTH_LONG).show()
+            }
+
 
     override fun onStart() {
         super.onStart()
