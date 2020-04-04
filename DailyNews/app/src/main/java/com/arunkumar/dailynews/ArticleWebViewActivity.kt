@@ -2,6 +2,7 @@ package com.arunkumar.dailynews
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +19,18 @@ class ArticleWebViewActivity : AppCompatActivity() {
 
         val bundle = intent.extras
         val webSettings = webview.settings
+
         webSettings.javaScriptEnabled = true
+        webSettings.domStorageEnabled = true
+        webSettings.loadWithOverviewMode = true
+        webSettings.useWideViewPort = true
+        webSettings.builtInZoomControls = true
+        webSettings.displayZoomControls = false
+        webSettings.setSupportZoom(true)
+        webSettings.defaultTextEncodingName = "utf-8"
+
+        webview.webChromeClient = WebChromeClient()
+
         webview.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 showProgressUI(iv_progress)

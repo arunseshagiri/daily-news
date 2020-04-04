@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ArticlesApi {
-    @GET("top-headlines?country=in&pageSize=100&q=corona")
-    fun articles(@Query("page") page: Int, @Query("country") country: String): Single<OuterArticle>
+    @GET("top-headlines?pageSize=100&q=corona")
+    fun articles(@Query("page") page: Int, @Query("country") country: String?): Single<OuterArticle>
 }

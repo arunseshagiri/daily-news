@@ -2,14 +2,12 @@ package com.arunkumar.dailynews
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arunkumar.dailynews.api.ArticlesApiService
-import com.arunkumar.dailynews.model.Articles
 import com.arunkumar.dailynews.utils.ARTICLE_URL
 import com.arunkumar.dailynews.utils.PREFERENCE_COUNTRY
 import com.arunkumar.dailynews.utils.hideProgressUI
@@ -48,16 +46,7 @@ class MainActivity : AppCompatActivity() {
         disposables.add(listenToShowProgress())
         disposables.add(listenToHideProgress())
         disposables.add(listenToShowError())
-        disposables.add(listenForRecentArticleList())
-        disposables.add(listenForPopularArticleList())
 
-        when {
-            !(savedInstanceState?.containsKey("article_list") ?: false) -> viewModel.onCreate(
-                PreferenceManager.getDefaultSharedPreferences(this)
-                    .getString(PREFERENCE_COUNTRY, "") ?: "in"
-            )
-            else -> hideProgressUI(iv_progress)
-        }
         articleAdapter
             .launchWebView()
             .subscribe(
@@ -72,22 +61,11 @@ class MainActivity : AppCompatActivity() {
             )
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        when {
-            articleAdapter.articleList().isNotEmpty() -> outState.apply {
-                putParcelableArrayList("article_list", ArrayList<Parcelable>(articleAdapter.articleList()))
-            }
-        }
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        when {
-            savedInstanceState.containsKey("article_list") -> savedInstanceState.apply {
-                articleAdapter.articleList(getParcelableArrayList<Articles>("article_list") as MutableList<Articles>)
-            }
-        }
+    override fun onStart() {
+        super.onStart()
+        viewModel.onStart(
+            PreferenceManager.getDefaultSharedPreferences(this).getString(PREFERENCE_COUNTRY, "")
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -103,30 +81,6 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    private fun listenForRecentArticleList() =
-        viewModel
-            .articleListSortedForRecent()
-            .subscribe(
-                {
-                    articleAdapter.articleList(it)
-                },
-                {
-                    showErrorUI()
-                }
-            )
-
-    private fun listenForPopularArticleList() =
-        viewModel
-            .articleListSortedForPopular()
-            .subscribe(
-                {
-                    articleAdapter.articleList(it)
-                },
-                {
-                    showErrorUI()
-                }
-            )
 
     private fun initializeRecyclerView() {
         rv_news.setHasFixedSize(true)

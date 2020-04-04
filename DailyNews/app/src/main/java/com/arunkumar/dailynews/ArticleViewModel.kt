@@ -17,11 +17,7 @@ class ArticleViewModel(private val articlesApiService: ArticlesApiService) {
     private var articleListSortedForPopular: PublishSubject<List<Articles>> =
         PublishSubject.create()
 
-    fun onCreate(country: String) {
-        fetchArticles(country)
-    }
-
-    fun onStart(country: String) {
+    fun onStart(country: String?) {
         fetchArticles(country)
     }
 
@@ -37,7 +33,7 @@ class ArticleViewModel(private val articlesApiService: ArticlesApiService) {
 
     fun articleListSortedForPopular(): PublishSubject<List<Articles>> = articleListSortedForPopular
 
-    private fun fetchArticles(country: String) = articlesApiService
+    private fun fetchArticles(country: String?) = articlesApiService
         .articles(country)
         .toObservable()
         .observeOn(mainThread())
@@ -50,34 +46,6 @@ class ArticleViewModel(private val articlesApiService: ArticlesApiService) {
             },
             {
                 it.printStackTrace()
-                showError().onNext(it.message!!)
-            }
-        )
-
-    fun sortBasedOnRecentArticle(articleList: List<Articles>) = Single
-        .just(articleList)
-        //.map { it -> it.sortedWith(compareByDescending { it.timeCreated }).toMutableList() }
-        .subscribeOn(Schedulers.io())
-        .observeOn(mainThread())
-        .subscribe(
-            {
-                articleListSortedForRecent().onNext(it)
-            },
-            {
-                showError().onNext(it.message!!)
-            }
-        )
-
-    fun sortBasedOnPopularArticle(articleList: List<Articles>) = Single
-        .just(articleList)
-        //.map { it -> it.sortedWith(compareBy({ it.rank }, { it.timeCreated })).toMutableList() }
-        .subscribeOn(Schedulers.io())
-        .observeOn(mainThread())
-        .subscribe(
-            {
-                articleListSortedForPopular().onNext(it)
-            },
-            {
                 showError().onNext(it.message!!)
             }
         )
